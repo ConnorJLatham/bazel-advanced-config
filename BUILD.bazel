@@ -1,16 +1,3 @@
-load("@rules_python//python:pip.bzl", "compile_pip_requirements")
-load("//common:defs.bzl", "config")
-load("//third_party/python:requirements.bzl", "PY_DEPS")
+load("@rules_python//python:py_binary.bzl", "py_binary")
 
-config(
-    name = "reqs.in",
-    srcs = ["requirements.in"],
-    dict_string_config = "{}".format({"deps": PY_DEPS}),
-)
-
-compile_pip_requirements(
-    name = "requirements",
-    extra_args = ["--allow-unsafe"],
-    requirements_in = ":reqs.in",
-    requirements_txt = "//third_party/python:requirements_lock.txt",
-)
+py_binary(name = "cool")

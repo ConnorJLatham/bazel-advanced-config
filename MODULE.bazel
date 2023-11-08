@@ -1,0 +1,18 @@
+bazel_dep(name = "rules_python", version = "0.26.0")
+
+python = use_extension("@rules_python//python/extensions:python.bzl", "python")
+
+python.toolchain(
+    python_version = "3.11",
+    is_default = True,
+)
+
+pip = use_extension("@rules_python//python/extensions:pip.bzl", "pip")
+
+pip.parse(
+    hub_name = "third_party",
+    python_version = "3.11",
+    requirements_lock = "//:requirements_lock.txt",
+)
+
+use_repo(pip, "third_party")
