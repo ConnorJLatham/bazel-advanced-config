@@ -1,3 +1,7 @@
-{% for dep_name, dep_info in deps.items() %}
-{{ dep_name }}=={{ dep_info.version }}
-{% endfor %}
+# {% for dep_name, dep_info in deps.items() %}
+# {{ dep_name }}=={{ dep_info.version }}
+# {% endfor %}
+
+PyYAML==6.0.1
+Jinja2==3.1.2
+cbor2==5.5.1

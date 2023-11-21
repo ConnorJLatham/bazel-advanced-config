@@ -1,0 +1,13 @@
+load("@rules_python//python:py_binary.bzl", "py_binary")
+load("@pypi//:requirements.bzl", "requirement")
+
+package(default_visibility = ["//visibility:public"])
+
+py_binary(
+    name = "cbor_configurator",
+    srcs = ["cbor_configurator.py"],
+    deps = [
+        requirement("cbor2"),
+        requirement("PyYAML"),
+    ],
+)

@@ -1,0 +1,14 @@
+load("//cbor_config:defs.bzl", "cbor_config")
+
+cbor_config(
+    name = "test_config_1",
+    srcs = [
+        "test_config_1.yaml",
+        "test_config_2.json",
+    ],
+)
+
+cbor_config(
+    name = "test_config_2",
+    srcs = [":test_config_1"],
+)
