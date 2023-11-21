@@ -6,6 +6,8 @@ def _cbor_config_impl(ctx):
 
     # Get configs
     srcs = ctx.attr.srcs
+
+    # overrides = ctx.attr.srcs
     config_list = []
 
     for file_group in srcs:
@@ -13,6 +15,12 @@ def _cbor_config_impl(ctx):
             config_symlink = ctx.actions.declare_file("{}/config/{}".format(name, file))
             ctx.actions.symlink(output = config_symlink, target_file = file)
             config_list.append(config_symlink)
+
+    # for file_group in overrides:
+    #     for file in file_group.files.to_list():
+    #         config_symlink = ctx.actions.declare_file("{}/config/{}".format(name, file))
+    #         ctx.actions.symlink(output = config_symlink, target_file = file)
+    #         config_list.append(config_symlink)
 
     output_cbor = ctx.actions.declare_file("{}.cbor".format(name))
 
@@ -35,6 +43,7 @@ cbor_config = rule(
     implementation = _cbor_config_impl,
     attrs = {
         "srcs": attr.label_list(allow_files = True),
+        "overrides": attr.label_list(allow_files = True),
         # Rendering binary, probably dont touch this.
         "_cbor_configurator": attr.label(
             default = Label("//cbor_config:cbor_configurator"),
