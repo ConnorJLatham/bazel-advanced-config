@@ -1,5 +1,4 @@
 load("@rules_python//python:py_binary.bzl", "py_binary")
-load("@pypi//:requirements.bzl", "requirement")
 load("@rules_python//python:pip.bzl", "compile_pip_requirements")
 
 package(default_visibility = ["//visibility:public"])
@@ -8,8 +7,8 @@ py_binary(
     name = "jinja_template_renderer",
     srcs = ["jinja_template_renderer.py"],
     deps = [
-        requirement("jinja2"),
-        requirement("PyYAML"),
+        "@pypi//jinja2",
+        "@pypi//pyyaml",
     ],
 )
 

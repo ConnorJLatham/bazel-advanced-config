@@ -6,8 +6,8 @@ def _cbor_config_impl(ctx):
 
     # Get configs
     srcs = ctx.attr.srcs
+    overrides = ctx.attr.overrides
 
-    # overrides = ctx.attr.srcs
     config_list = []
 
     for file_group in srcs:
@@ -16,11 +16,11 @@ def _cbor_config_impl(ctx):
             ctx.actions.symlink(output = config_symlink, target_file = file)
             config_list.append(config_symlink)
 
-    # for file_group in overrides:
-    #     for file in file_group.files.to_list():
-    #         config_symlink = ctx.actions.declare_file("{}/config/{}".format(name, file))
-    #         ctx.actions.symlink(output = config_symlink, target_file = file)
-    #         config_list.append(config_symlink)
+    for file_group in overrides:
+        for file in file_group.files.to_list():
+            config_symlink = ctx.actions.declare_file("{}/config/overrides/{}".format(name, file))
+            ctx.actions.symlink(output = config_symlink, target_file = file)
+            config_list.append(config_symlink)
 
     output_cbor = ctx.actions.declare_file("{}.cbor".format(name))
 
@@ -39,7 +39,7 @@ def _cbor_config_impl(ctx):
 
     return [DefaultInfo(files = depset([output_cbor]))]
 
-cbor_config = rule(
+_cbor_config = rule(
     implementation = _cbor_config_impl,
     attrs = {
         "srcs": attr.label_list(allow_files = True),
@@ -52,3 +52,6 @@ cbor_config = rule(
         ),
     },
 )
+
+def cbor_config(name, srcs, overrides = [], **kwargs):
+    _cbor_config(name = name, srcs = srcs, overrides = overrides)

@@ -19,10 +19,8 @@ cbor_config(
     name = "test_config_3",
     srcs = [
         ":test_config_1",
+    ],
+    overrides = [
         ":test_config_2",
     ],
-    # TODO add overrides
-    # overrides = [
-    #     ":test_config_2"
-    # ],
 )
