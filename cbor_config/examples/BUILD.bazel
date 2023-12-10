@@ -1,5 +1,7 @@
 load("//cbor_config:defs.bzl", "cbor_config")
 
+package(default_visibility = ["//visibility:public"])
+
 cbor_config(
     name = "test_config_1",
     srcs = [

@@ -1,0 +1,7 @@
+load("//jinja_templater:defs.bzl", "render_templates")
+
+render_templates(
+    name = "fun_template",
+    srcs = ["cool_template.yaml"],
+    config = ["//cbor_config/examples:test_config_1"],
+)
