@@ -7,8 +7,7 @@ import cbor2
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--template_files_dir", type=Path)
-    parser.add_argument("--rendered_files_dir", type=Path)
+    parser.add_argument("--template_file_paths", type=Path, action="append")
     parser.add_argument("--cbor_config_path", type=Path, default=None)
     parser.add_argument("--config_keyword", type=str, default="")
 
@@ -16,8 +15,9 @@ def parse_args():
 
 
 def create_jinja_environment(template_files_dir, jinja_config={}):
-    jinja_env = Environment(
-        loader=FileSystemLoader(template_files_dir),
+    print(template_files_dir)
+    return Environment(
+        loader=FileSystemLoader(searchpath="./"),
         undefined=StrictUndefined,
         autoescape=False,
         trim_blocks=True,
@@ -29,11 +29,6 @@ def create_jinja_environment(template_files_dir, jinja_config={}):
 if __name__ == "__main__":
     args = parse_args()
 
-    print(args)
-
-    template_files_dir = args.template_files_dir
-    rendered_files_dir = args.rendered_files_dir
-
     if args.cbor_config_path:
         config = cbor2.load(args.cbor_config_path.open(mode="rb"))
     else:
@@ -41,16 +36,13 @@ if __name__ == "__main__":
 
     if args.config_keyword:
         config = {args.config_keyword: config}
-    # jinja_config = args.jinja_config_path
 
-    jinja_env = create_jinja_environment(template_files_dir)
+    # TODO add jinja options file here
+    jinja_env = create_jinja_environment(args.template_file_paths)
 
-    # Render each template, write to rendered dir
-    for template_name in jinja_env.list_templates():
+    for template_name in args.template_file_paths:
         try:
-            rendered_text = jinja_env.get_template(template_name).render(
-                **combined_config
-            )
+            rendered_text = jinja_env.get_template(str(template_name)).render(**config)
         except jinja2.exceptions.UndefinedError as undefined_err:
             raise Exception(
                 "You seemed to have used an incorrect string when referencing config "
@@ -60,4 +52,4 @@ if __name__ == "__main__":
         except Exception as err:
             raise Exception(f"Seems like we dont capture this error: {err}")
 
-        (rendered_files_dir / template_name).write_text(rendered_text)
+        Path(f"./rendered/{template_name.name}").write_text(rendered_text)
