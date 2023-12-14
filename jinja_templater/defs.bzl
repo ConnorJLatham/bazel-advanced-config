@@ -1,4 +1,5 @@
 """Tools for rendering a jinja template."""
+
 load("//cbor_config:defs.bzl", "cbor_config")
 
 def _render_jinja_template_impl(ctx):
@@ -12,12 +13,14 @@ def _render_jinja_template_impl(ctx):
 
     for file_group in srcs:
         for template_file in file_group.files.to_list():
-            exec_args.add("--template_file_paths",  template_file)
+            exec_args.add("--template_file_paths", template_file)
             inputs.append(template_file)
             outputs.append(ctx.actions.declare_file("{}/rendered/{}".format(name, template_file.basename)))
 
     if cbor_config_path:
         exec_args.add("--cbor_config_path", ctx.file.cbor_config_path.path)
+
+    exec_args.add("--rendered_directory_path", outputs[0].dirname)
 
     ctx.actions.run(
         executable = ctx.executable._template_renderer_binary,
