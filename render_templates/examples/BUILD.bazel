@@ -1,0 +1,13 @@
+load("//jinja_templater:defs.bzl", "render_templates")
+
+render_templates(
+    name = "fun_template",
+    srcs = ["cool_template.yaml"],
+    deps = ["//cbor_config/examples:test_config_3"],
+)
+
+render_templates(
+    name = "code_template",
+    srcs = ["code_template.py"],
+    deps = [":code_template_config.toml"],
+)

@@ -44,20 +44,20 @@ _render_templates = rule(
     },
 )
 
-def render_templates(name, srcs = [], config = [], **kwargs):
+def render_templates(name, srcs = [], deps = [], **kwargs):
     """
     Render jinja templates using any file usable in cbor_config.
 
     Args:
         name (str): Name of the rendered file group target.
         srcs (list, optional): List of templates to render.
-        config (list, optional): _List of config targets to use.
+        deps (list, optional): _List of config targets to use.
         **kwargs: additional arguments for either rule.
     """
     cbor_config_path = None
     if config:
         cbor_config_target_name = "{}.cbor_config".format(name)
-        cbor_config(name = cbor_config_target_name, srcs = config, **kwargs)
+        cbor_config(name = cbor_config_target_name, srcs = deps, **kwargs)
         cbor_config_path = cbor_config_target_name
 
     _render_templates(name = name, srcs = srcs, cbor_config_path = cbor_config_path, **kwargs)

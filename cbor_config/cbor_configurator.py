@@ -19,6 +19,14 @@ def _recursively_check_dict_for_key(
     """
     all_flattened_key_values = {}
 
+    if file_being_checked.suffix == ".cbor":
+        target_name = file_being_checked.name.replace(f'{file_being_checked.suffix}', '')
+    else:
+        target_name =file_being_checked.name
+
+    if not isinstance(dict_to_recurse, dict):
+        raise ValueError(f"File {target_name} is not of type 'dict'. Cannot have non-dict type at top level of config." )
+
     for key_in_dict_to_check, value_in_dict_to_check in dict_to_recurse.items():
         full_key_name = (
             f"{root_key_name}.{key_in_dict_to_check}"
@@ -34,9 +42,9 @@ def _recursively_check_dict_for_key(
                 )
 
                 if file_being_checked.suffix == ".cbor":
-                    exception_text += f"bazel target with name {file_being_checked.name.replace(f'{file_being_checked.suffix}', '')}.\n"
+                    exception_text += f"bazel target with name {target_name}.\n"
                 else:
-                    exception_text += f"file with name {file_being_checked.name}."
+                    exception_text += f"file with name {target_name}."
 
                 raise ValueError(exception_text)
 
