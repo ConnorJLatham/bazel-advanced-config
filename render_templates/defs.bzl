@@ -37,7 +37,7 @@ _render_templates = rule(
         "srcs": attr.label_list(allow_files = True, allow_empty = False),
         "cbor_config_path": attr.label(allow_single_file = True),
         "_template_renderer_binary": attr.label(
-            default = Label("//jinja_templater:jinja_template_renderer"),
+            default = Label("//render_templates:jinja_template_renderer"),
             executable = True,
             cfg = "exec",
         ),

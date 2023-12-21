@@ -1,4 +1,4 @@
-load("//jinja_templater:defs.bzl", "render_templates")
+load("//render_templates:defs.bzl", "render_templates")
 
 render_templates(
     name = "fun_template",
