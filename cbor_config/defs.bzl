@@ -1,3 +1,5 @@
+"""Implementation for cbor_config."""
+
 def _cbor_config_impl(ctx):
     name = ctx.label.name
     srcs = ctx.attr.srcs
@@ -29,12 +31,26 @@ def _cbor_config_impl(ctx):
 
     return [DefaultInfo(files = depset([output_cbor]))]
 
+# Currently only support a selection of human readable file types.
+# Can probably grow over time.
+_ALLOWED_SOURCE_TYPES = [".toml", ".yaml", ".cbor", ".json"]
+
 _cbor_config = rule(
     implementation = _cbor_config_impl,
     attrs = {
-        "srcs": attr.label_list(allow_files = [".toml", ".yaml", ".cbor", ".json"], mandatory = True),
-        "overrides": attr.label_list(allow_files = [".toml", ".yaml", ".cbor", ".json"]),
+        "srcs": attr.label_list(
+            doc = "The source files being used for configuration.",
+            allow_files = _ALLOWED_SOURCE_TYPES,
+            # Ya gotta have some config!
+            mandatory = True,
+        ),
+        "overrides": attr.label_list(
+            doc = "Source files that are allowed to directly override key/values that may already exist.",
+            allow_files = _ALLOWED_SOURCE_TYPES,
+            default = [],
+        ),
         "_cbor_configurator": attr.label(
+            doc = "The binary used for generating the cbor config file.",
             default = Label("//cbor_config:cbor_configurator"),
             executable = True,
             cfg = "exec",

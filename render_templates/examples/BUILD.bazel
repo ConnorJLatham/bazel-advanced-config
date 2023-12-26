@@ -2,12 +2,12 @@ load("//render_templates:defs.bzl", "render_templates")
 
 render_templates(
     name = "fun_template",
-    srcs = ["cool_template.yaml"],
+    srcs = ["cool_template.yaml.j2"],
     deps = ["//cbor_config/examples:test_config_3"],
 )
 
 render_templates(
     name = "code_template",
-    srcs = ["code_template.py"],
+    srcs = ["code_template.py.j2"],
     deps = [":code_template_config.toml"],
 )

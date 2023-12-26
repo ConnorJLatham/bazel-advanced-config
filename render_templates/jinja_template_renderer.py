@@ -58,5 +58,10 @@ if __name__ == "__main__":
         except Exception as err:
             raise Exception(f"Seems like we dont capture this error: {err}")
 
-        rendered_file = rendered_dir / f"{template_name.name}"
+        # get rid of the .j2 and spit out the rendered file type.
+        split_template_name = template_name.name.split('.')
+        split_template_name.pop(-1)
+        rendered_file_name = ".".join(split_template_name)
+
+        rendered_file = rendered_dir / rendered_file_name
         rendered_file.write_text(rendered_text)
