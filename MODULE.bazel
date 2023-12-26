@@ -1,5 +1,14 @@
+"""
+This module provides helpers for ingesting multiple types of human-readable 'config'
+files such as .yaml and .json and combining them into .cbor files. These .cbor files
+can then be used as config for binaries or for expanding jinja templates using the
+'render_templates' rule.
+"""
+
 module(
-    name="bazel_advanced_config"
+    name = "bazel_advanced_config",
+    version = "0.2.0",
+    compatibility_level = 0,
 )
 
 bazel_dep(name = "rules_python", version = "0.27.0")
@@ -22,4 +31,3 @@ pip.parse(
 )
 
 use_repo(pip, "pypi")
-

@@ -1,6 +1,5 @@
 import argparse
 import jinja2
-from jinja2 import Environment, StrictUndefined, FileSystemLoader
 from pathlib import Path
 import cbor2
 
@@ -20,9 +19,9 @@ def create_jinja_environment(template_files_paths, jinja_config={}):
         template_file_path.parent for template_file_path in template_files_paths
     ]
 
-    return Environment(
-        loader=FileSystemLoader(template_paths),
-        undefined=StrictUndefined,
+    return jinja2.Environment(
+        loader=jinja2.FileSystemLoader(template_paths),
+        undefined=jinja2.StrictUndefined,
         autoescape=False,
         trim_blocks=True,
         lstrip_blocks=True,

@@ -1,6 +1,6 @@
 {
   "lockFileVersion": 3,
-  "moduleFileHash": "d136a4a1f0545afb3d20adf6e48bac2949526c4437664d79a9bc95d71e49140f",
+  "moduleFileHash": "7894bacede1167e1112116e985f60e68a45016b61e28e7f82dfa2f60313dda57",
   "flags": {
     "cmdRegistries": [
       "https://bcr.bazel.build/"
@@ -18,7 +18,7 @@
   "moduleDepGraph": {
     "<root>": {
       "name": "bazel_advanced_config",
-      "version": "",
+      "version": "0.2.0",
       "key": "<root>",
       "repoName": "bazel_advanced_config",
       "executionPlatformsToRegister": [],
@@ -30,7 +30,7 @@
           "usingModule": "<root>",
           "location": {
             "file": "@@//:MODULE.bazel",
-            "line": 9,
+            "line": 18,
             "column": 23
           },
           "imports": {},
@@ -45,7 +45,7 @@
               "devDependency": false,
               "location": {
                 "file": "@@//:MODULE.bazel",
-                "line": 11,
+                "line": 20,
                 "column": 17
               }
             }
@@ -59,7 +59,7 @@
           "usingModule": "<root>",
           "location": {
             "file": "@@//:MODULE.bazel",
-            "line": 16,
+            "line": 25,
             "column": 20
           },
           "imports": {
@@ -77,7 +77,7 @@
               "devDependency": false,
               "location": {
                 "file": "@@//:MODULE.bazel",
-                "line": 18,
+                "line": 27,
                 "column": 10
               }
             }
