@@ -3,8 +3,8 @@ load("@rules_python//python:py_binary.bzl", "py_binary")
 package(default_visibility = ["//visibility:public"])
 
 py_binary(
-    name = "jinja_template_renderer",
-    srcs = ["jinja_template_renderer.py"],
+    name = "render_jinja_templates",
+    srcs = ["render_jinja_templates.py"],
     deps = [
         "@pypi//jinja2",
         "@pypi//cbor2",

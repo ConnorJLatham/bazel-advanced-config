@@ -51,7 +51,7 @@ _cbor_config = rule(
         ),
         "_cbor_configurator": attr.label(
             doc = "The binary used for generating the cbor config file.",
-            default = Label("//cbor_config:cbor_configurator"),
+            default = Label("//cbor_config:cbor_config"),
             executable = True,
             cfg = "exec",
         ),

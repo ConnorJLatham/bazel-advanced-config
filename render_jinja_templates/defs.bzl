@@ -36,7 +36,7 @@ def _render_jinja_template_impl(ctx):
 
     return [DefaultInfo(files = depset(outputs))]
 
-_render_templates = rule(
+_render_jinja_templates = rule(
     implementation = _render_jinja_template_impl,
     attrs = {
         "srcs": attr.label_list(
@@ -48,31 +48,56 @@ _render_templates = rule(
         ),
         "cbor_config": attr.label(
             doc = "The cbor config that will be used to expand the template.",
-            # Simplifies the script if we only use cbor since we already have a rule
-            # for generating cbors from many file types.
+            # Just allow cbor and use a macro to ingest other file types.
+            allow_single_file = [".cbor"],
+        ),
+        "jinja_settings": attr.label(
+            doc = """A cbor file that contains kwargs that will be passed to the Jinja2 Environment.""",
+            # Just allow cbor and use a macro to ingest other file types.
             allow_single_file = [".cbor"],
         ),
         "_template_renderer_binary": attr.label(
-            default = Label("//render_templates:jinja_template_renderer"),
+            default = Label("//render_jinja_templates:render_jinja_templates"),
             executable = True,
             cfg = "exec",
         ),
     },
 )
 
-def render_templates(name, srcs = [], deps = [], **kwargs):
+def render_jinja_templates(name, srcs = [], deps = [], jinja_settings_files = [], **kwargs):
     """
     Render jinja templates using any file usable in cbor_config.
 
     Args:
         name (str): Name of the rendered file group target.
         srcs (list, optional): List of templates to render.
-        deps (list, optional): List of config targets to use.
+        deps (list, optional): List of config targets to use for rendering.
+        jinja_settings_files (list, optional): List of files to use for configuring jinja settings.
         **kwargs: additional arguments for either rule.
     """
     cbor_config_target = None
+    cbor_jinja_settings_target = None
+
     if deps:
         cbor_config_target = "{}.cbor_config".format(name)
-        cbor_config(name = cbor_config_target, srcs = deps, **kwargs)
+        cbor_config(
+            name = cbor_config_target,
+            srcs = deps,
+            **kwargs
+        )
 
-    _render_templates(name = name, srcs = srcs, cbor_config = cbor_config_target, **kwargs)
+    if jinja_settings_files:
+        cbor_jinja_settings_target = "{}.cbor_jinja_settings".format(name)
+        cbor_config(
+            name = cbor_jinja_settings_target,
+            srcs = jinja_settings_files,
+            **kwargs
+        )
+
+    _render_jinja_templates(
+        name = name,
+        srcs = srcs,
+        cbor_config = cbor_config_target,
+        jinja_settings = cbor_jinja_settings_target,
+        **kwargs
+    )

@@ -1,0 +1,40 @@
+load("@rules_python//python:defs.bzl", "py_test")
+load("//cbor_config:defs.bzl", "cbor_config")
+
+cbor_config(
+    name = "small_config",
+    srcs = [
+        "config_1.yaml",
+        "config_2.toml",
+        "config_3.json",
+    ],
+)
+
+cbor_config(
+    name = "downstream_config",
+    srcs = [
+        ":small_config",
+    ],
+)
+
+cbor_config(
+    name = "nested_config",
+    srcs = [
+        "config_4.yaml",
+
+    ],
+)
+
+py_test(
+    name = "tests",
+    srcs = ["tests.py"],
+    data = [
+        ":downstream_config",
+        ":small_config",
+        ":nested_config",
+    ],
+    deps = [
+        "//cbor_config",
+        "@pypi//cbor2",
+    ],
+)

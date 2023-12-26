@@ -37,9 +37,6 @@ if __name__ == "__main__":
     else:
         config = {}
 
-    if args.config_keyword:
-        config = {args.config_keyword: config}
-
     # TODO add jinja options file here
     jinja_env = create_jinja_environment(args.template_file_paths)
 

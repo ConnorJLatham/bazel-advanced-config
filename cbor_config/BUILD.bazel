@@ -3,8 +3,8 @@ load("@rules_python//python:py_binary.bzl", "py_binary")
 package(default_visibility = ["//visibility:public"])
 
 py_binary(
-    name = "cbor_configurator",
-    srcs = ["cbor_configurator.py"],
+    name = "cbor_config",
+    srcs = ["cbor_config.py"],
     deps = [
         "@pypi//cbor2",
         "@pypi//pyyaml",

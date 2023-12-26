@@ -4,10 +4,14 @@ import argparse
 from pathlib import Path
 import json
 import tomllib
+from typing import Dict, Any, AnyStr, List
 
 
-def _recursively_check_dict_for_key(
-    dict_to_recurse, key_values_to_check, file_being_checked, root_key_name=""
+def recursively_check_dict_for_key(
+    dict_to_recurse: Dict[AnyStr, Any],
+    key_values_to_check: Dict[AnyStr, Any],
+    file_being_checked: Path,
+    root_key_name: AnyStr="",
 ):
     """
     Args:
@@ -19,13 +23,18 @@ def _recursively_check_dict_for_key(
     """
     all_flattened_key_values = {}
 
+    # clean up the name the config comes from to make error messages better.
     if file_being_checked.suffix == ".cbor":
-        target_name = file_being_checked.name.replace(f'{file_being_checked.suffix}', '')
+        target_name = file_being_checked.name.replace(
+            f"{file_being_checked.suffix}", ""
+        )
     else:
-        target_name =file_being_checked.name
+        target_name = file_being_checked.name
 
     if not isinstance(dict_to_recurse, dict):
-        raise ValueError(f"File {target_name} is not of type 'dict'. Cannot have non-dict type at top level of config." )
+        raise ValueError(
+            f"File {target_name} is not of type 'dict'. Cannot have non-dict type at top level of config."
+        )
 
     for key_in_dict_to_check, value_in_dict_to_check in dict_to_recurse.items():
         full_key_name = (
@@ -59,7 +68,7 @@ def _recursively_check_dict_for_key(
     for potential_dict_key, potential_nested_dict in dict_to_recurse.items():
         if isinstance(potential_nested_dict, dict):
             all_flattened_key_values.update(
-                **_recursively_check_dict_for_key(
+                **recursively_check_dict_for_key(
                     potential_nested_dict,
                     key_values_to_check,
                     file_being_checked,
@@ -74,7 +83,6 @@ def _recursively_check_dict_for_key(
 def convert_file_to_dict(file):
     if "yaml" in file.suffix:
         return yaml.load(file.open(), Loader=yaml.UnsafeLoader)
-
     if "json" in file.suffix:
         return json.load(file.open())
     if "cbor" in file.suffix:
@@ -112,7 +120,7 @@ if __name__ == "__main__":
         # We search the new dictionary for any keys we already added.
         # This might look like "my.nested.path.to.key"
         flattened_total_config_dict.update(
-            **_recursively_check_dict_for_key(
+            **recursively_check_dict_for_key(
                 new_config_dict,
                 flattened_total_config_dict,
                 file,
