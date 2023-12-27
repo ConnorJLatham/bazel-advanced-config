@@ -20,7 +20,7 @@ def _render_jinja_template_impl(ctx):
             split_template_name = template_file.basename.split(".")
             split_template_name.pop(-1)
             rendered_file_name = ".".join(split_template_name)
-            outputs.append(ctx.actions.declare_file("{}/rendered/{}".format(name, rendered_file_name)))
+            outputs.append(ctx.actions.declare_file("{}".format(rendered_file_name)))
 
     if cbor_config:
         exec_args.add("--cbor_config_path", cbor_config.path)

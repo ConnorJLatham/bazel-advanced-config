@@ -117,4 +117,5 @@ def cbor_config(name, srcs, overrides = [], **kwargs):
         json_string_srcs = json_string_srcs,
         file_overrides_srcs = file_overrides_srcs,
         json_string_override_srcs = json_string_override_srcs,
+        **kwargs,
     )

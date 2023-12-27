@@ -26,6 +26,7 @@ cbor_config(
             "dict_1->string_5": "string!",
         },
     ],
+    visibility = ["//render_jinja_templates/tests:__pkg__"],
 )
 
 cbor_config(

@@ -1,0 +1,7 @@
+string_1: {{ string_1 }}
+integer_1: {{ integer_1 }}
+float_1: {{ float_1 }}
+dict_1:
+{% for key, value in dict_1.items() %}
+    {{ key }}: {{ value }}
+{% endfor %}

@@ -1,0 +1,27 @@
+load("@rules_python//python:defs.bzl", "py_test")
+load("//render_jinja_templates:defs.bzl", "render_jinja_templates")
+load("//cbor_config:defs.bzl", "cbor_config")
+
+render_jinja_templates(
+    name = "render_template_test",
+    srcs = ["template_1.yaml.j2"],
+    deps = ["//cbor_config/tests:small_config"],
+)
+
+# Just turn the rendered template(s) into cbor to make it easier to test.
+cbor_config(
+    name = "render_template_test_config",
+    srcs = [":render_template_test"]
+)
+
+py_test(
+    name = "tests",
+    srcs = ["tests.py"],
+    data = [
+        ":render_template_test_config",
+    ],
+    deps = [
+        "//render_jinja_templates",
+        "@pypi//cbor2",
+    ],
+)
