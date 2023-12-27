@@ -1,6 +1,6 @@
 load("@rules_python//python:defs.bzl", "py_test")
-load("//render_jinja_templates:defs.bzl", "render_jinja_templates")
-load("//cbor_config:defs.bzl", "cbor_config")
+# Ensure we can pull from top level like end user.
+load("//:defs.bzl", "render_jinja_templates", "cbor_config")
 
 render_jinja_templates(
     name = "render_template_test",

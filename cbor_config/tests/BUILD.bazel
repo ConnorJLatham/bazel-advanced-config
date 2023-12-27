@@ -1,5 +1,6 @@
 load("@rules_python//python:defs.bzl", "py_test")
-load("//cbor_config:defs.bzl", "cbor_config")
+# Lets ensure we can pull from the top level file like an end user.
+load("//:defs.bzl", "cbor_config")
 
 cbor_config(
     name = "small_config",
