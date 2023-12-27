@@ -7,6 +7,24 @@ cbor_config(
         "config_1.yaml",
         "config_2.toml",
         "config_3.json",
+        {
+            "string_4": "string",
+            "integer_4": 1,
+            "float_4": 1.1,
+        },
+        {
+            "dict_1": {
+                "string_5": "string",
+                "integer_5": 1,
+                "float_5": 1.1,
+            },
+        },
+    ],
+    overrides = [
+        {
+            "string_4": "string!",
+            "dict_1->string_5": "string!",
+        },
     ],
 )
 
@@ -21,7 +39,6 @@ cbor_config(
     name = "nested_config",
     srcs = [
         "config_4.yaml",
-
     ],
 )
 
@@ -30,8 +47,8 @@ py_test(
     srcs = ["tests.py"],
     data = [
         ":downstream_config",
-        ":small_config",
         ":nested_config",
+        ":small_config",
     ],
     deps = [
         "//cbor_config",

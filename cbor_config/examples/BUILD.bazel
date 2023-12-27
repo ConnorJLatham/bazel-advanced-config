@@ -35,6 +35,7 @@ cbor_config(
 cbor_config(
     name = "massive_config_with_deps",
     srcs = [
+        # Let's combined two massive configs.
         ":massive_json.json",
         ":massive_config",
     ],

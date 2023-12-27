@@ -4,14 +4,17 @@ import argparse
 from pathlib import Path
 import json
 import tomllib
-from typing import Dict, Any, AnyStr, List
+from typing import Dict, Any, AnyStr
+
+OVERRIDES_KEYWORD = "_overrides"
+NESTED_DICT_ACCESS_SYMBOL = "->"
 
 
 def recursively_check_dict_for_key(
     dict_to_recurse: Dict[AnyStr, Any],
     key_values_to_check: Dict[AnyStr, Any],
     file_being_checked: Path,
-    root_key_name: AnyStr="",
+    root_key_name: AnyStr = "",
 ):
     """
     Args:
@@ -105,17 +108,32 @@ def parse_args():
 
     return parser.parse_args()
 
+def assign_deep_key(dict_to_recurse, key_to_find, value_to_assign):
+    split_key = key_to_find.split(NESTED_DICT_ACCESS_SYMBOL)
+    next_layer_key = split_key[0]
+    if len(split_key) > 1:
+        assign_deep_key(dict_to_recurse[next_layer_key], split_key[1], value_to_assign)
+    else:
+        dict_to_recurse[next_layer_key] = value_to_assign
+
 
 if __name__ == "__main__":
     args = parse_args()
 
     # The full dict to turn into a .cbor.
     total_config_dict = {}
+    overrides_dict = {}
     # A list of all full keypaths and their values.
     flattened_total_config_dict = {}
 
     for file in args.config_file_paths:
         new_config_dict = convert_file_to_dict(file)
+
+        # Carry over existing override values, but take them out of here.
+        # Avoids nested _override keys.
+        existing_overrides = new_config_dict.pop(OVERRIDES_KEYWORD, None)
+        if existing_overrides:
+            overrides_dict.update(**existing_overrides)
 
         # We search the new dictionary for any keys we already added.
         # This might look like "my.nested.path.to.key"
@@ -130,7 +148,20 @@ if __name__ == "__main__":
         total_config_dict.update(**new_config_dict)
 
     for file in args.override_config_file_paths:
-        total_config_dict.update(**convert_file_to_dict(file))
+        config_dict = convert_file_to_dict(file)
+
+        # There may be _override keys inside this config, but since
+        # it all becomes overrides, we don't care about the value.
+        # This avoids nested override dicts.
+        config_dict.pop(OVERRIDES_KEYWORD, None)
+
+        for override_key, override_value in config_dict.items():
+            assign_deep_key(total_config_dict, override_key, override_value)
+
+        overrides_dict.update({f"{file.name}": config_dict})
+
+    if overrides_dict:
+        total_config_dict[OVERRIDES_KEYWORD] = overrides_dict
 
     with args.output_cbor_path.open(mode="wb") as fp:
         cbor2.dump(total_config_dict, fp)
