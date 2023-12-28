@@ -10,12 +10,18 @@ def _load_config(name):
 
 rendered_config = _load_config("render_template_test_config")
 
-assert rendered_config["string_1"] == "string"
-assert rendered_config["integer_1"] == 1
-assert rendered_config["float_1"] == 1.1
-
-assert rendered_config["dict_1"] == {
-    "string_5": "string!",
-    "integer_5": 1,
-    "float_5": 1.1,
+assert rendered_config == {
+    "test": "test",
+    "string_1": "string",
+    "integer_1": 1,
+    "float_1": 1.1,
+    "dict_1": {
+        "string_5": "string!",
+        "integer_5": 1,
+        "float_5": 1.1,
+    },
+    "dict_2": {
+        "string_6": "string",
+    },
 }
+

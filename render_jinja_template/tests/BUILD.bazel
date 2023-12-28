@@ -7,6 +7,7 @@ render_jinja_template(
     name = "render_template_test",
     template = "template_1.yaml.j2",
     deps = [
+        "macro.j2",
         "template_2.yaml.j2",
         "//cbor_config/tests:small_config",
     ],
