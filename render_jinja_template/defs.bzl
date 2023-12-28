@@ -15,8 +15,6 @@ def _render_jinja_template_impl(ctx):
             inputs.append(file)
             args.add("--template_dep_path", file)
 
-    print(inputs)
-
     args.add("--template_file_path", template_file)
     if cbor_config:
         args.add("--cbor_config_path", cbor_config.path)
