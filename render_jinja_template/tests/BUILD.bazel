@@ -1,17 +1,21 @@
 load("@rules_python//python:defs.bzl", "py_test")
-# Ensure we can pull from top level like end user.
-load("//:defs.bzl", "render_jinja_templates", "cbor_config")
 
-render_jinja_templates(
+# Ensure we can pull from top level like end user.
+load("//:defs.bzl", "cbor_config", "render_jinja_template")
+
+render_jinja_template(
     name = "render_template_test",
-    srcs = ["template_1.yaml.j2"],
-    deps = ["//cbor_config/tests:small_config"],
+    template = "template_1.yaml.j2",
+    deps = [
+        "template_2.yaml.j2",
+        "//cbor_config/tests:small_config",
+    ],
 )
 
 # Just turn the rendered template(s) into cbor to make it easier to test.
 cbor_config(
     name = "render_template_test_config",
-    srcs = [":render_template_test"]
+    srcs = [":render_template_test"],
 )
 
 py_test(
@@ -21,7 +25,7 @@ py_test(
         ":render_template_test_config",
     ],
     deps = [
-        "//render_jinja_templates",
+        "//render_jinja_template",
         "@pypi//cbor2",
     ],
 )

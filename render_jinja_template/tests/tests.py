@@ -4,7 +4,7 @@ import pathlib
 
 def _load_config(name):
     return cbor2.load(
-        pathlib.Path(f"render_jinja_templates/tests/{name}.cbor").open(mode="rb")
+        pathlib.Path(f"render_jinja_template/tests/{name}.cbor").open(mode="rb")
     )
 
 
