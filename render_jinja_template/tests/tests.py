@@ -8,7 +8,7 @@ def _load_config(name):
     )
 
 
-rendered_config = _load_config("render_template_test_config")
+rendered_config = _load_config("render_yaml_template_config")
 
 assert rendered_config == {
     "test": "test",
